@@ -4,6 +4,7 @@ const Lanes = require("../models/lanes");
 
 const asyncHandler = require("express-async-handler");
 
+// Home Page
 exports.index = asyncHandler(async (req, res, next) => {
   // Get details of the champions, roles and lanes
   const [
