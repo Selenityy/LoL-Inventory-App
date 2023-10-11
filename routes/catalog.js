@@ -37,9 +37,6 @@ router.post("/champions/:id/update", champion_controller.champion_update_post);
 
 /// ROLE ROUTES ///
 
-// GET request for list of all roles.
-// router.get("/roles", role_controller.role_list);
-
 // GET request for each individual role.
 router.get("/roles/assassins", role_controller.role_assassins);
 router.get("/roles/fighters", role_controller.role_fighters);
@@ -50,14 +47,11 @@ router.get("/roles/tanks", role_controller.role_tanks);
 
 /// LANE ROUTES ///
 
-// GET request for list of all lanes.
-router.get("/lanes", lane_controller.lane_list);
-
 // GET request for each individual lane.
 router.get("/lanes/top", lane_controller.lane_top);
 router.get("/lanes/jungle", lane_controller.lane_jungle);
 router.get("/lanes/mid", lane_controller.lane_mid);
 router.get("/lanes/bot", lane_controller.lane_bot);
-router.get("/lanes/support", lane_controller.lane_support);
+router.get("/lanes/support", lane_controller.lane_sup);
 
 module.exports = router;
