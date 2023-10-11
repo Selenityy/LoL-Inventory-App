@@ -109,9 +109,9 @@ exports.lane_support = asyncHandler(async (req, res, next) => {
       .populate("lane")
       .exec();
 
-    res.render("lane_sup", {
+    res.render("lane_support", {
       title: "League Support Lane",
-      lane_sup: supChampions,
+      lane_support: supChampions,
     });
   } catch (error) {
     next(error);
