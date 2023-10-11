@@ -6,8 +6,7 @@ block content
 
   ul
     each champion in role_fighters
-      li
-        .name
-          | #{champion.name}
+      li 
+        a(href=champion.url, class='name') #{champion.name}
     else
         p No champions with the role of Fighters found.

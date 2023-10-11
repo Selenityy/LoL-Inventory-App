@@ -6,7 +6,8 @@ block content
 
     ul
         each champion in role_assassins
-            li #{champion.name}
+            li 
+                a(href=champion.url, class='name') #{champion.name}
     
         else
             p No champions with the role of Assassins found.
