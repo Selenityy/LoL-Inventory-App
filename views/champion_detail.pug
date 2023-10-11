@@ -1,23 +1,28 @@
-extend layout
+extends layout
 
 block content
-    style.
-        .champ_description {
-        font-style: italic;
-        font-size: 1.3rem;
-        }
+  style.
+    .champ_description
+      font-style: italic
+      font-size: 1.3rem
 
-    h1= title
+  h1= title
 
-    h2(class='champ_name') #{champion_detail.name}
-    h3(class='champ_description') #{champion_detail.description}
-    p Roles:
-        ul
-            each role in champion_detail.role
-                li
-                    | #{role.role}
-    p Lanes:
-        ul
-            each lane in champion_detail.lane
-                li
-                    | #{lane.lane}
+  h2.champ_name #{champion_detail.name}
+  h3.champ_description #{champion_detail.description}
+
+  p Roles:
+    ul
+      each role in champion_detail.role
+        li= role.role
+
+  p Lanes:
+    ul
+      each lane in champion_detail.lane
+        li= lane.lane
+
+  hr
+
+  p
+    a(href=champion_detail._id+'/delete') Delete Champion
+

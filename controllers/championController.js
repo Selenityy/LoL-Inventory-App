@@ -118,7 +118,10 @@ exports.champion_create_post = [
 
   // Validate and sanitize fields.
   body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
-  body("description", "Description must not be empty").trim().isLength({min: 1}).escape(),
+  body("description", "Description must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
   body("roles.*").escape(),
   body("lanes.*").escape(),
 
@@ -164,12 +167,24 @@ exports.champion_create_post = [
 
 // Display Champion delete form on GET.
 exports.champion_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion delete GET");
+  const champion = await Champions.findById(req.params.id)
+    .populate("name")
+    .exec();
+
+  if (champion === null) {
+    res.redirect("/catalog/champions");
+  }
+
+  res.render("champion_delete", {
+    title: "Delete Champion",
+    champion: champion,
+  });
 });
 
 // Handle Champion delete on POST.
 exports.champion_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion delete POST");
+  await Champions.findByIdAndRemove(req.body.championid);
+  res.redirect("/catalog/champions");
 });
 
 // Display Champion update form on GET.

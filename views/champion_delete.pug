@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 #{title}: #{champion.name}
+
+    p Do you really want to delete this Author?
+
+    form(method='POST' action='')
+        div.form-group
+            input#championid.form-control(type='hidden', name='championid', required='true', value=champion._id )
+
+        button.btn.btn-primary(type='submit') Delete
