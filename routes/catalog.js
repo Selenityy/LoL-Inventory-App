@@ -38,20 +38,20 @@ router.post("/champions/:id/update", champion_controller.champion_update_post);
 /// ROLE ROUTES ///
 
 // GET request for each individual role.
-router.get("/roles/assassins", role_controller.role_assassins);
-router.get("/roles/fighters", role_controller.role_fighters);
-router.get("/roles/mages", role_controller.role_mages);
-router.get("/roles/marksmen", role_controller.role_marksmen);
-router.get("/roles/supports", role_controller.role_supports);
-router.get("/roles/tanks", role_controller.role_tanks);
+router.get("/assassins", role_controller.role_assassins);
+router.get("/fighters", role_controller.role_fighters);
+router.get("/mages", role_controller.role_mages);
+router.get("/marksmen", role_controller.role_marksmen);
+router.get("/supports", role_controller.role_supports);
+router.get("/tanks", role_controller.role_tanks);
 
 /// LANE ROUTES ///
 
 // GET request for each individual lane.
-router.get("/lanes/top", lane_controller.lane_top);
-router.get("/lanes/jungle", lane_controller.lane_jungle);
-router.get("/lanes/mid", lane_controller.lane_mid);
-router.get("/lanes/bot", lane_controller.lane_bot);
-router.get("/lanes/support", lane_controller.lane_sup);
+router.get("/top", lane_controller.lane_top);
+router.get("/jungle", lane_controller.lane_jungle);
+router.get("/mid", lane_controller.lane_mid);
+router.get("/bot", lane_controller.lane_bot);
+router.get("/support", lane_controller.lane_support);
 
 module.exports = router;
