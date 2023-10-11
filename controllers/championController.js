@@ -68,7 +68,22 @@ exports.champion_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Champion.
 exports.champion_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Champion detail: ${req.params.id}`);
+  const championDetail = await Champions.findById(req.params.id)
+    .populate("description")
+    .populate("role")
+    .populate("lane")
+    .exec();
+
+  if (championDetail === null) {
+    const err = new Error("Champion not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("champion_detail", {
+    title: "Champion Detail",
+    champion_detail: championDetail,
+  });
 });
 
 // Display Champion create form on GET.
