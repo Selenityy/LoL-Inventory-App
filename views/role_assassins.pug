@@ -1,0 +1,12 @@
+extends layout
+
+block content
+
+    h1= title
+
+    ul
+        each champion in role_assassins
+            li #{champion.name}
+    
+        else
+            p No champions with the role of Assassins found.

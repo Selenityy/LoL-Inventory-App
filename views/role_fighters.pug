@@ -1,0 +1,13 @@
+extends layout
+
+block content
+
+  h1= title
+
+  ul
+    each champion in role_fighters
+      li
+        .name
+          | #{champion.name}
+    else
+        p No champions with the role of Fighters found.
