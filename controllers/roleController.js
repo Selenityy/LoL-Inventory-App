@@ -1,17 +1,57 @@
 const Roles = require("../models/roles");
+const Champions = require("../models/champions");
 const asyncHandler = require("express-async-handler");
 
 // Display list of all Roles
-exports.role_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Role list");
-});
 
 exports.role_assassins = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Assassins");
+  try {
+    // Find the role with the name "Assassins"
+    const assassinsRole = await Roles.findOne({ role: "Assassins" });
+    if (!assassinsRole) {
+      return res.render("role_list", {
+        title: "League Role List",
+        role_list: [],
+      });
+    }
+
+    // Find the champions with the "Assassins" role.
+    const assassinChampions = await Champions.find({ role: assassinsRole._id })
+      .populate("role")
+      .exec();
+
+    res.render("role_assassins", {
+      title: "League Assassins",
+      role_assassins: assassinChampions,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 exports.role_fighters = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Fighters");
+  try {
+    // Find the role with the name "Assassins"
+    const fightersRole = await Roles.findOne({ role: "Fighters" });
+    if (!fightersRole) {
+      return res.render("role_list", {
+        title: "League Role List",
+        role_list: [],
+      });
+    }
+
+    // Find the champions with the "Fighters" role.
+    const fighterChampions = await Champions.find({ role: fightersRole._id })
+      .populate("role")
+      .exec();
+
+    res.render("role_fighters", {
+      title: "League Fighters",
+      role_fighters: fighterChampions,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 exports.role_mages = asyncHandler(async (req, res, next) => {

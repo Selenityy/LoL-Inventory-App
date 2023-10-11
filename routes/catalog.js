@@ -38,7 +38,7 @@ router.post("/champions/:id/update", champion_controller.champion_update_post);
 /// ROLE ROUTES ///
 
 // GET request for list of all roles.
-router.get("/roles", role_controller.role_list);
+// router.get("/roles", role_controller.role_list);
 
 // GET request for each individual role.
 router.get("/roles/assassins", role_controller.role_assassins);
