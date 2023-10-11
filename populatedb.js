@@ -29,6 +29,7 @@ async function main() {
   await createRoles();
   await createLanes();
   await createChampions();
+  console.log(champions);
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }

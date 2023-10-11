@@ -53,8 +53,9 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 // Display list of all Champions.
 exports.champion_list = asyncHandler(async (req, res, next) => {
-  const allChampions = await Champions.find({}, "name role lane")
+  const allChampions = await Champions.find({}, "name description role lane")
     .sort({ name: 1 })
+    .populate("description")
     .populate("role")
     .populate("lane")
     .exec();

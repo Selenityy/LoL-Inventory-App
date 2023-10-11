@@ -1,19 +1,44 @@
 extends layout
 
 block content
+  style.
+    ul.roles, ul.lanes {
+      list-style-type: disc; /* Use disc or any other list style you prefer */
+      margin-left: 40px; /* Adjust the margin as needed */
+    }
+    ul {
+      list-style: none; /* Hide list style for all other ul elements */
+      padding: 0; /* Remove default padding */
+    }
+    li a {
+      font-size: 18px; /* Adjust the font size for champion names */
+    }
+    .catagories {
+      margin-left: 20px; /* Adjust the left margin for indented elements */
+    }
+    .description {
+      font-style: italic;
+    }
+
   h1= title
 
   ul
     each champion in champion_list
       li
         a(href=champion.url) #{champion.name}
+        span(class='description') - #{champion.description}
+
         ul
-          each role in champion.role
-            li
-              | Role: #{role.role}
-          each lane in champion.lane
-            li
-              | Lane: #{lane.lane}
+          li(class='catagories') Roles:
+            ul(class='roles')
+              each role in champion.role
+                li
+                  | #{role.role}
+          li(class='catagories') Lanes:
+            ul(class='lanes')
+              each lane in champion.lane
+                li
+                  | #{lane.lane}
 
     else
        li There are no champions or roles defined.

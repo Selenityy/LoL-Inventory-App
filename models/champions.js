@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const ChampionSchema = new Schema({
   name: { type: String, required: true },
-  description: { type: String },
+  description: { type: String, required: true },
   role: [{ type: Schema.Types.ObjectId, ref: "Roles", required: true }],
   lane: [{ type: Schema.Types.ObjectId, ref: "Lanes", required: true }],
 });
