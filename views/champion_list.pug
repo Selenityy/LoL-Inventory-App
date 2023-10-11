@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each champion in champion_list
+      li
+        a(href=champion.url) #{champion.name}
+        ul
+          each role in champion.role
+            li
+              | Role: #{role.role}
+          each lane in champion.lane
+            li
+              | Lane: #{lane.lane}
+
+    else
+       li There are no champions or roles defined.

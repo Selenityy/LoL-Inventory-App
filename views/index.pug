@@ -2,4 +2,29 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em LoL Champion Inventory], a very basic Express website developed as a tutorial example on the Mozilla Developer Network.
+
+  h1 Dynamic content
+
+  p The library has the following record counts:
+
+  p #[strong All League Champions]
+  ul
+    li Champions: !{champion_count}
+
+  p #[strong Champions by Role]
+  ul
+    li Assassins: !{assassin_count}
+    li Fighters: !{fighter_count}
+    li Mages: !{mage_count}
+    li Marksmen: !{marksmen_count}
+    li Supports: !{support_count}
+    li Tanks: !{tank_count}
+
+  p #[strong Champions by Lane]
+  ul
+    li Top Lane: !{top_lane_count}
+    li Jungle: !{jungle_lane_count}
+    li Mid Lane: !{mid_lane_count}
+    li Bot Lane: !{bot_lane_count}
+    li Support: !{sup_lane_count}

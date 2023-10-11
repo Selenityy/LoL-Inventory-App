@@ -1,13 +1,68 @@
 const Champions = require("../models/champions");
+const Roles = require("../models/roles");
+const Lanes = require("../models/lanes");
+
 const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
+  // Get details of the champions, roles and lanes
+  const [
+    numChampions,
+    numAssassinRoles,
+    numFighterRoles,
+    numMageRoles,
+    numMarksmenRoles,
+    numSupportRoles,
+    numTankRoles,
+    numTopLanes,
+    numJungleLanes,
+    numMidLanes,
+    numBotLanes,
+    numSupportLanes,
+  ] = await Promise.all([
+    Champions.countDocuments({}).exec(),
+    Roles.countDocuments({ role: "Assassins" }).exec(),
+    Roles.countDocuments({ role: "Fighters" }).exec(),
+    Roles.countDocuments({ role: "Mages" }).exec(),
+    Roles.countDocuments({ role: "Marksmen" }).exec(),
+    Roles.countDocuments({ role: "Supports" }).exec(),
+    Roles.countDocuments({ role: "Tanks" }).exec(),
+    Lanes.countDocuments({ lane: "Top" }).exec(),
+    Lanes.countDocuments({ lane: "Jungle" }).exec(),
+    Lanes.countDocuments({ lane: "Mid" }).exec(),
+    Lanes.countDocuments({ lane: "Bot" }).exec(),
+    Lanes.countDocuments({ lane: "Support" }).exec(),
+  ]);
+
+  res.render("index", {
+    title: "League of Legends Champion Inventory",
+    champion_count: numChampions,
+    assassin_count: numAssassinRoles,
+    fighter_count: numFighterRoles,
+    mage_count: numMageRoles,
+    marksmen_count: numMarksmenRoles,
+    support_count: numSupportRoles,
+    tank_count: numTankRoles,
+    top_lane_count: numTopLanes,
+    jungle_lane_count: numJungleLanes,
+    mid_lane_count: numMidLanes,
+    bot_lane_count: numBotLanes,
+    sup_lane_count: numSupportLanes,
+  });
 });
 
 // Display list of all Champions.
 exports.champion_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion list");
+  const allChampions = await Champions.find({}, "name role lane")
+    .sort({ name: 1 })
+    .populate("role")
+    .populate("lane")
+    .exec();
+
+  res.render("champion_list", {
+    title: "League Champion List",
+    champion_list: allChampions,
+  });
 });
 
 // Display detail page for a specific Champion.

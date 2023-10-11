@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const LaneSchema = new Schema({
   champion: { type: Schema.Types.ObjectId, ref: "Champion" },
   lane: {
+    type: String,
     enum: ["Top", "Jungle", "Mid", "Bot", "Support"],
   },
 });

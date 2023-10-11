@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const RoleSchema = new Schema({
   champion: { type: Schema.Types.ObjectId, ref: "Champion" },
   role: {
+    type: String,
     enum: ["Assassins", "Fighters", "Mages", "Marksmen", "Supports", "Tanks"],
   },
 });

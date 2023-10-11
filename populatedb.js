@@ -37,8 +37,6 @@ async function championCreate(index, name, description, role, lane) {
   const championDetail = {
     name: name,
     description: description,
-    role: role,
-    lane: lane,
   };
   if (role != false) championDetail.role = role;
   if (lane != false) championDetail.lane = lane;
@@ -50,14 +48,14 @@ async function championCreate(index, name, description, role, lane) {
 }
 
 async function roleCreate(index, name) {
-  const role = new Role({ name: name });
+  const role = new Role({ role: name });
   await role.save();
   roles[index] = role;
   console.log(`Added role: ${name}`);
 }
 
 async function laneCreate(index, name) {
-  const lane = new Lane({ name: name });
+  const lane = new Lane({ lane: name });
   await lane.save();
   lanes[index] = lane;
   console.log(`Added lane: ${name}`);
@@ -89,12 +87,22 @@ async function createLanes() {
 async function createChampions() {
   console.log("Adding Champions");
   await Promise.all([
-    championCreate(0, "Aatrox", "The Darkin Blade", roles[1], [lanes[0]]),
-    championCreate(1, "Ahri", "The Nine-tailed Fox", roles[2], [lanes[2]]),
-    championCreate(2, "Amumu", "The Sad Mummy", roles[5], [lanes[1], lanes[4]]),
-    championCreate(3, "Ashe", "The Frost Archer", roles[3], [
-      lanes[3],
-      lanes[4],
-    ]),
+    championCreate(0, "Aatrox", "The Darkin Blade", [roles[1]], [lanes[0]]),
+    championCreate(1, "Ahri", "The Nine-tailed Fox", [roles[2]], [lanes[2]]),
+    championCreate(
+      2,
+      "Amumu",
+      "The Sad Mummy",
+      [roles[5]],
+      [lanes[1], lanes[4]]
+    ),
+    championCreate(
+      3,
+      "Ashe",
+      "The Frost Archer",
+      [roles[3]],
+      [lanes[3], lanes[4]]
+    ),
+    championCreate(4, "Soraka", "The Starchild", [roles[4]], [lanes[4]]),
   ]);
 }
