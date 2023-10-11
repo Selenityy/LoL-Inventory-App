@@ -11,12 +11,6 @@ const lane_controller = require("../controllers/laneController");
 // GET catalog home page.
 router.get("/", champion_controller.index);
 
-// GET request for list of all Champions.
-router.get("/champions", champion_controller.champion_list);
-
-// GET request for one Champion.
-router.get("/champions/:id", champion_controller.champion_detail);
-
 // GET request for creating a Champion. NOTE This must come before routes that display Champions (uses id).
 router.get("/champions/create", champion_controller.champion_create_get);
 
@@ -34,6 +28,12 @@ router.get("/champions/:id/update", champion_controller.champion_update_get);
 
 // POST request to update Champion.
 router.post("/champions/:id/update", champion_controller.champion_update_post);
+
+// GET request for list of all Champions.
+router.get("/champions", champion_controller.champion_list);
+
+// GET request for one Champion.
+router.get("/champions/:id", champion_controller.champion_detail);
 
 /// ROLE ROUTES ///
 

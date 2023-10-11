@@ -2,6 +2,7 @@ const Champions = require("../models/champions");
 const Roles = require("../models/roles");
 const Lanes = require("../models/lanes");
 
+const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 
 // Home Page
@@ -89,13 +90,77 @@ exports.champion_detail = asyncHandler(async (req, res, next) => {
 
 // Display Champion create form on GET.
 exports.champion_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion create GET");
+  const [allRoles, allLanes] = await Promise.all([
+    Roles.find().exec(),
+    Lanes.find().exec(),
+  ]);
+
+  res.render("champion_form", {
+    title: "Create a Champion",
+    roles: allRoles,
+    lanes: allLanes,
+  });
 });
 
 // Handle Champion create on POST.
-exports.champion_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion create POST");
-});
+exports.champion_create_post = [
+  // Convert the roles and lanes to arrays.
+  (req, res, next) => {
+    if (!(req.body.role instanceof Array)) {
+      if (typeof req.body.role === "undefined") req.body.role = [];
+      else req.body.role = new Array(req.body.role);
+    } else if (!(req.body.lane instanceof Array)) {
+      if (typeof req.body.lane === "undefined") req.body.lane = [];
+      else req.body.lane = new Array(req.body.lane);
+    }
+    next();
+  },
+
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty").trim().isLength({min: 1}).escape(),
+  body("roles.*").escape(),
+  body("lanes.*").escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const champion = new Champions({
+      name: req.body.name,
+      description: req.body.description,
+      role: req.body.role,
+      lane: req.body.lane,
+    });
+
+    if (!errors.isEmpty()) {
+      const [allRoles, allLanes] = await Promise.all([
+        Roles.find().exec(),
+        Lanes.find().exec,
+      ]);
+
+      for (const role of allRoles) {
+        if (champion.role.includes(role._id)) {
+          role.checked = "true";
+        }
+      }
+      for (const lane of allLanes) {
+        if (champion.lane.includes(lane._id)) {
+          lane.checked = "true";
+        }
+      }
+
+      res.render("champion_form", {
+        title: "Create Champion",
+        roles: allRoles,
+        lanes: allLanes,
+        errors: errors.array(),
+      });
+    } else {
+      await champion.save();
+      res.redirect(champion.url);
+    }
+  }),
+];
 
 // Display Champion delete form on GET.
 exports.champion_delete_get = asyncHandler(async (req, res, next) => {
