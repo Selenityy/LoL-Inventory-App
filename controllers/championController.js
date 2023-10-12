@@ -189,10 +189,105 @@ exports.champion_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Champion update form on GET.
 exports.champion_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion update GET");
+  const [champion, allRoles, allLanes] = await Promise.all([
+    Champion.findById(req.params.id).populate("role").populate("lane").exec(),
+    Roles.find().exec(),
+    Lanes.find().exec(),
+  ]);
+
+  if (champion === null) {
+    const err = new Error("Champion not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  for (const role of allRoles) {
+    for (const champion_r of champion.role) {
+      if (role._id.toString() === champion_r.id.toString()) {
+        role.checked = "true";
+      }
+    }
+  }
+
+  for (const lane of allLanes) {
+    for (const champion_r of champion.role) {
+      if (lane._id.toString() === champion_r.id.toString()) {
+        lane.checked = "true";
+      }
+    }
+  }
+
+  res.render("champion_form", {
+    title: "Update Champion",
+    roles: allRoles,
+    lanes: allLanes,
+  });
 });
 
 // Handle Champion update on POST.
-exports.champion_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Champion update POST");
-});
+exports.champion_update_post = [
+  // Convert the roles and lanes to arrays.
+  (req, res, next) => {
+    if (!(req.body.role instanceof Array)) {
+      if (typeof req.body.role === "undefined") req.body.role = [];
+      else req.body.role = new Array(req.body.role);
+    } else if (!(req.body.lane instanceof Array)) {
+      if (typeof req.body.lane === "undefined") req.body.lane = [];
+      else req.body.lane = new Array(req.body.lane);
+    }
+    next();
+  },
+
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("roles.*").escape(),
+  body("lanes.*").escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const champion = new Champions({
+      name: req.body.name,
+      description: req.body.description,
+      role: req.body.role,
+      lane: req.body.lane,
+    });
+
+    if (!errors.isEmpty()) {
+      const [allRoles, allLanes] = await Promise.all([
+        Roles.find().exec(),
+        Lanes.find().exec,
+      ]);
+
+      for (const role of allRoles) {
+        if (champion.role.includes(role._id)) {
+          role.checked = "true";
+        }
+      }
+      for (const lane of allLanes) {
+        if (champion.lane.includes(lane._id)) {
+          lane.checked = "true";
+        }
+      }
+
+      res.render("champion_form", {
+        title: "Create Champion",
+        roles: allRoles,
+        lanes: allLanes,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const updatedChampion = await Champion.findByIdAndUpdate(
+        req.params.id,
+        champion,
+        {}
+      );
+      res.redirect(updatedChampion.url);
+    }
+  }),
+];
