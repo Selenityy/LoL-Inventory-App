@@ -190,7 +190,12 @@ exports.champion_delete_post = asyncHandler(async (req, res, next) => {
 // Display Champion update form on GET.
 exports.champion_update_get = asyncHandler(async (req, res, next) => {
   const [champion, allRoles, allLanes] = await Promise.all([
-    Champion.findById(req.params.id).populate("role").populate("lane").exec(),
+    Champions.findById(req.params.id)
+      .populate("name")
+      .populate("description")
+      .populate("role")
+      .populate("lane")
+      .exec(),
     Roles.find().exec(),
     Lanes.find().exec(),
   ]);
@@ -210,7 +215,7 @@ exports.champion_update_get = asyncHandler(async (req, res, next) => {
   }
 
   for (const lane of allLanes) {
-    for (const champion_r of champion.role) {
+    for (const champion_r of champion.lane) {
       if (lane._id.toString() === champion_r.id.toString()) {
         lane.checked = "true";
       }
@@ -219,6 +224,7 @@ exports.champion_update_get = asyncHandler(async (req, res, next) => {
 
   res.render("champion_form", {
     title: "Update Champion",
+    champion: champion,
     roles: allRoles,
     lanes: allLanes,
   });
@@ -255,6 +261,7 @@ exports.champion_update_post = [
       description: req.body.description,
       role: req.body.role,
       lane: req.body.lane,
+      _id: req.params.id,
     });
 
     if (!errors.isEmpty()) {
@@ -275,14 +282,15 @@ exports.champion_update_post = [
       }
 
       res.render("champion_form", {
-        title: "Create Champion",
+        title: "Update Champion",
         roles: allRoles,
         lanes: allLanes,
+        champion: champion,
         errors: errors.array(),
       });
       return;
     } else {
-      const updatedChampion = await Champion.findByIdAndUpdate(
+      const updatedChampion = await Champions.findByIdAndUpdate(
         req.params.id,
         champion,
         {}
