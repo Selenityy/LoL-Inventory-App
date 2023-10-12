@@ -17,7 +17,7 @@ const dev_db_url =
   "mongodb+srv://your_user_name:your_password@cluster0.mw4rw38.mongodb.net/local_library?retryWrites=true&w=majority";
 const mongoDB = process.env.MONGODB_URI_LOL || dev_db_url;
 
-main().catch((err) => consol.log(err));
+main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
